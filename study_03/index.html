@@ -31,22 +31,111 @@
       <!-- 1. 시작 화면 (Intro Screen) -->
       <section id="introScreen" class="screen active">
         <div class="intro-content">
-          <div class="hero-badge">2026 최신 기출문제 은행</div>
-          <h1 class="game-title">정보처리기사<br><span class="accent-text">기출 퀴즈 게임</span></h1>
+          <div class="hero-badge">2026 최신 기출문제 은행 &bull; 5과목 완벽 대비</div>
+          <h1 class="game-title">정보처리기사<br><span class="accent-text">CBT 퀴즈 챌린지</span></h1>
           <p class="game-description">
-            실제 시험 기출문제를 게임처럼 재미있게 풀어보세요!<br>
-            매 라운드 <strong>무작위 10문제</strong>와 즉각적인 해설이 제공됩니다.
+            게임처럼 즐기는 정보처리기사 필기 합격 트레이닝!<br>
+            <strong>콤보 &amp; 스피드 보너스</strong>와 실제 시험 대비 <strong>맞춤형 모드</strong>를 경험해보세요.
           </p>
 
-          <div class="feature-tags">
-            <span class="tag">⚡ 4지선다 10문제</span>
-            <span class="tag">💡 즉각 피드백 & 상세해설</span>
-            <span class="tag">⏱️ 실시간 타이머</span>
-            <span class="tag">🏆 랭킹 챌린지</span>
+          <!-- 게임 모드 선택 섹션 -->
+          <div class="mode-select-section">
+            <h3 class="section-title">🎮 훈련 모드 선택</h3>
+            <div class="mode-grid" id="modeGrid">
+              <!-- 모드 1: 클래식 10제 -->
+              <div class="mode-card active" data-mode="classic">
+                <div class="mode-header">
+                  <span class="mode-icon">🎯</span>
+                  <span class="mode-tag tag-standard">기본</span>
+                </div>
+                <h4 class="mode-title">클래식 10제</h4>
+                <p class="mode-desc">전 과목 무작위 10문제를 가볍게 풀며 기본기를 점검합니다.</p>
+              </div>
+
+              <!-- 모드 2: 실전 CBT 모의고사 (과락 진단) -->
+              <div class="mode-card" data-mode="mock">
+                <div class="mode-header">
+                  <span class="mode-icon">📋</span>
+                  <span class="mode-tag tag-recommend">강추</span>
+                </div>
+                <h4 class="mode-title">실전 CBT 모의고사</h4>
+                <p class="mode-desc">5개 전 과목 균등 출제! 40점 미만 과락 진단 및 합격 판정을 제공합니다.</p>
+              </div>
+
+              <!-- 모드 3: 서바이벌 데스매치 -->
+              <div class="mode-card" data-mode="survival">
+                <div class="mode-header">
+                  <span class="mode-icon">⚡</span>
+                  <span class="mode-tag tag-hard">하드코어</span>
+                </div>
+                <h4 class="mode-title">서바이벌 데스매치</h4>
+                <p class="mode-desc">단 한 번의 오답으로 즉시 탈락! 극한의 집중력으로 최고 연속 정답에 도전하세요.</p>
+              </div>
+
+              <!-- 모드 4: 10초 타임어택 -->
+              <div class="mode-card" data-mode="timeattack">
+                <div class="mode-header">
+                  <span class="mode-icon">⏱️</span>
+                  <span class="mode-tag tag-speed">스피드</span>
+                </div>
+                <h4 class="mode-title">10초 타임어택</h4>
+                <p class="mode-desc">문제당 10초 제한! 지문 핵심 키워드를 빠르게 파악하는 순발력을 훈련합니다.</p>
+              </div>
+
+              <!-- 모드 5: 과목별 집중 공략 -->
+              <div class="mode-card" data-mode="subject">
+                <div class="mode-header">
+                  <span class="mode-icon">📚</span>
+                  <span class="mode-tag tag-focus">취약 보완</span>
+                </div>
+                <h4 class="mode-title">과목별 집중 공략</h4>
+                <p class="mode-desc">자신이 약한 특정 과목만 10문제 선택하여 집중적으로 파고듭니다.</p>
+              </div>
+
+              <!-- 모드 6: 스마트 오답노트 -->
+              <div class="mode-card" data-mode="wrongnotes" id="wrongNoteModeCard">
+                <div class="mode-header">
+                  <span class="mode-icon">📝</span>
+                  <span class="mode-tag tag-note" id="wrongNoteBadge">0문제</span>
+                </div>
+                <h4 class="mode-title">스마트 오답노트</h4>
+                <p class="mode-desc">이전에 틀렸던 문제만 쏙쏙 모아 복습! 맞히면 오답노트에서 자동 제거됩니다.</p>
+              </div>
+            </div>
+
+            <!-- 과목별 집중 공략 선택 시 나타나는 과목 선택 칩 영역 -->
+            <div class="subject-select-area" id="subjectSelectArea" style="display: none;">
+              <label class="subject-select-label">🎯 집중 학습할 과목을 선택하세요:</label>
+              <div class="subject-chips" id="subjectChips">
+                <button type="button" class="chip-btn active" data-subject="소프트웨어 설계">1과목. 소프트웨어 설계</button>
+                <button type="button" class="chip-btn" data-subject="소프트웨어 개발">2과목. 소프트웨어 개발</button>
+                <button type="button" class="chip-btn" data-subject="데이터베이스 구축">3과목. 데이터베이스 구축</button>
+                <button type="button" class="chip-btn" data-subject="프로그래밍 언어 활용">4과목. 프로그래밍 언어 활용</button>
+                <button type="button" class="chip-btn" data-subject="정보시스템 구축관리">5과목. 정보시스템 구축관리</button>
+              </div>
+            </div>
           </div>
 
-          <button id="startQuizBtn" class="btn btn-primary btn-large btn-glow">
-            <span>🚀 기출문제 10개 풀기</span>
+          <!-- 점수 룰 안내 배지들 -->
+          <div class="score-rule-badges">
+            <span class="score-pill">💎 기본 100pt</span>
+            <span class="score-pill">🔥 연속 콤보 보너스</span>
+            <span class="score-pill">⚡ 스피드 보너스 (최대 +50pt)</span>
+          </div>
+
+          <!-- 메인 시작 버튼 -->
+          <button id="startQuizBtn" class="btn btn-primary btn-large btn-glow start-action-btn">
+            <span id="startBtnLabel">🚀 클래식 10제 시작하기</span>
+          </button>
+        </div>
+
+        <!-- 시작 화면 하단 유틸리티 (오답노트 관리 / 순위표) -->
+        <div class="intro-bottom-utilities">
+          <button id="openWrongNotesBtn" class="btn btn-secondary btn-sm util-btn">
+            <span>📝 오답노트 확인 (<span id="utilWrongCount">0</span>)</span>
+          </button>
+          <button id="openLeaderboardFromIntro" class="btn btn-secondary btn-sm util-btn">
+            <span>🏆 전체 명예의 전당</span>
           </button>
         </div>
 
@@ -54,7 +143,7 @@
         <div class="intro-leaderboard-box">
           <div class="box-header">
             <h3>🏆 명예의 전당 (TOP 5)</h3>
-            <button id="openLeaderboardFromIntro" class="text-link-btn">전체 순위 &gt;</button>
+            <span class="box-subtitle">점수 &amp; 시간 종합 랭킹</span>
           </div>
           <div id="introTop5List" class="top5-list">
             <!-- 자바스크립트로 렌더링 -->
@@ -67,22 +156,43 @@
         <!-- 인게임 상단 상태바 -->
         <div class="quiz-status-bar">
           <div class="status-left">
+            <span class="badge mode-indicator-badge" id="currentModeBadge">🎯 클래식</span>
             <span class="badge question-count-badge" id="currentQuestionNum">문제 1 / 10</span>
             <span class="badge subject-badge" id="currentSubject">소프트웨어 설계</span>
           </div>
           <div class="status-right">
+            <!-- 실시간 콤보 표시 배지 -->
+            <div class="combo-badge-wrap" id="comboBadgeWrap">
+              <span class="combo-icon">🔥</span>
+              <span id="comboCountText">0</span>
+              <span class="combo-label">COMBO</span>
+            </div>
+            <!-- 실시간 총 점수(pt) -->
+            <div class="score-badge" id="scorePointsBadge">
+              <span class="score-icon">💎</span>
+              <span id="scorePointsText">0</span> pt
+            </div>
+            <!-- 타이머 디스플레이 -->
             <div class="timer-display" id="timerDisplay">
-              <span class="timer-icon">⏱️</span>
+              <span class="timer-icon" id="timerIcon">⏱️</span>
               <span id="timerText">00:00</span>
             </div>
-            <button id="quitQuizBtn" class="btn btn-secondary btn-sm" title="처음으로 돌아가기">포기하기</button>
+            <button id="quitQuizBtn" class="btn btn-secondary btn-sm" title="처음으로 돌아가기">포기</button>
           </div>
         </div>
 
-        <!-- 진행도 프로그레스 바 -->
+        <!-- 전체 진행도 프로그레스 바 -->
         <div class="progress-bar-container">
           <div class="progress-bar-fill" id="progressBarFill" style="width: 10%;"></div>
         </div>
+
+        <!-- 타임어택 전용 문제 카운트다운 타이머 바 (타임어택 모드 시만 활성화) -->
+        <div class="timeattack-bar-container" id="timeAttackBarContainer" style="display: none;">
+          <div class="timeattack-bar-fill" id="timeAttackBarFill" style="width: 100%;"></div>
+        </div>
+
+        <!-- 점수 획득 팝업 이펙트 영역 -->
+        <div class="score-popup-wrapper" id="scorePopupWrapper"></div>
 
         <!-- 문제 카드 영역 -->
         <div class="question-card">
@@ -101,7 +211,10 @@
         <div class="feedback-panel" id="feedbackPanel">
           <div class="feedback-header" id="feedbackHeader">
             <span class="feedback-icon" id="feedbackIcon">✅</span>
-            <span class="feedback-title" id="feedbackTitle">정답입니다!</span>
+            <div class="feedback-title-wrap">
+              <span class="feedback-title" id="feedbackTitle">정답입니다!</span>
+              <span class="earned-score-badge" id="earnedScoreBadge">+100 pt</span>
+            </div>
           </div>
           <div class="explanation-box" id="explanationBox">
             <div class="explanation-label">💡 핵심 해설</div>
@@ -124,15 +237,31 @@
           <h2 class="result-status-title" id="resultStatusTitle">축하합니다! 합격권입니다!</h2>
           <p class="result-subtext" id="resultSubText">정보처리기사 필기 기준(60점)을 넘겼습니다.</p>
 
+          <!-- 결과 등급 & 점수 종합 카드 -->
           <div class="score-card">
+            <div class="result-tier-badge" id="resultTierBadge">
+              <span class="tier-icon" id="tierIcon">👑</span>
+              <span class="tier-title" id="tierTitle">S등급 (수석 합격권)</span>
+            </div>
+
+            <!-- CBT 챌린지 점수 (pt) -->
+            <div class="cbt-points-banner">
+              <div class="points-label">획득 CBT 챌린지 스코어</div>
+              <div class="points-number"><span id="resultPointsTotal">1,250</span> <span class="unit">pt</span></div>
+            </div>
+
             <div class="score-main">
               <span class="score-number" id="resultScore">8</span>
               <span class="score-divider">/</span>
-              <span class="score-total">10</span>
+              <span class="score-total" id="resultTotalQuestions">10</span>
             </div>
             <div class="score-percentage" id="resultPercentage">정답률 80% (80점)</div>
 
             <div class="result-meta-grid">
+              <div class="meta-item">
+                <span class="meta-label">🔥 최대 콤보</span>
+                <span class="meta-value" id="resultMaxCombo">5연속</span>
+              </div>
               <div class="meta-item">
                 <span class="meta-label">⏱️ 총 소요 시간</span>
                 <span class="meta-value" id="resultElapsedTime">01분 24초</span>
@@ -141,12 +270,33 @@
                 <span class="meta-label">🎯 평균 문제당 시간</span>
                 <span class="meta-value" id="resultAvgTime">8.4초</span>
               </div>
+              <div class="meta-item">
+                <span class="meta-label">🎮 플레이 모드</span>
+                <span class="meta-value" id="resultModeName">실전 모의고사</span>
+              </div>
+            </div>
+
+            <!-- 모의고사 모드 전용: 5개 과목별 과락 진단표 -->
+            <div class="mock-exam-report" id="mockExamReport" style="display: none;">
+              <h4 class="report-title">📋 과목별 득점 및 과락(40% 미만) 진단</h4>
+              <div class="subject-results-list" id="subjectResultsList">
+                <!-- JS로 5개 과목 과락/통과 현황 행 렌더링 -->
+              </div>
+              <div class="mock-final-verdict" id="mockFinalVerdict">
+                <!-- 종합 합격/과락 불합격 최종 판정 텍스트 -->
+              </div>
+            </div>
+
+            <!-- 오답노트 자동 저장 알림 배너 -->
+            <div class="wrong-note-banner" id="wrongNoteBanner">
+              <span class="icon">📝</span>
+              <span id="wrongNoteBannerText">틀린 문제는 오답노트에 자동 저장되었습니다.</span>
             </div>
           </div>
 
           <!-- 닉네임 등록 폼 -->
           <div class="rank-register-card" id="rankRegisterCard">
-            <h4 class="register-title">🏆 순위표에 내 기록 등록하기</h4>
+            <h4 class="register-title">🏆 명예의 전당에 내 기록 등록하기</h4>
             <div class="register-input-group">
               <input type="text" id="nicknameInput" class="text-input" placeholder="닉네임 입력 (2~10자)" maxlength="10">
               <button id="submitScoreBtn" class="btn btn-primary">등록하기</button>
@@ -156,39 +306,53 @@
 
           <!-- 결과 액션 버튼들 -->
           <div class="result-actions">
-            <button id="viewLeaderboardBtn" class="btn btn-secondary">
-              <span>📊 전체 순위표 보기</span>
+            <button id="retryCurrentModeBtn" class="btn btn-primary">
+              <span>🔄 다시 도전</span>
             </button>
-            <button id="restartQuizBtn" class="btn btn-primary">
-              <span>🔄 다시 풀기</span>
+            <button id="reviewWrongNotesFromBtn" class="btn btn-warning" style="display: none;">
+              <span>📝 오답노트 복습</span>
+            </button>
+            <button id="backToIntroBtn" class="btn btn-secondary">
+              <span>🏠 모드 선택으로</span>
+            </button>
+            <button id="viewLeaderboardBtn" class="btn btn-secondary">
+              <span>📊 순위표 보기</span>
             </button>
           </div>
         </div>
       </section>
     </main>
 
-    <!-- 전체 랭킹 모달 (Leaderboard Modal) -->
+    <!-- 1. 전체 랭킹 모달 (Leaderboard Modal) -->
     <div id="leaderboardModal" class="modal-overlay">
       <div class="modal-card">
         <div class="modal-header">
           <div class="modal-title-wrap">
             <span class="modal-icon">🏆</span>
-            <h3>정보처리기사 순위표</h3>
+            <h3>정보처리기사 명예의 전당</h3>
           </div>
           <button id="closeModalBtn" class="close-modal-btn" aria-label="닫기">&times;</button>
         </div>
 
         <div class="modal-body">
-          <p class="modal-caption">점수 높은 순 &gt; 소요 시간 짧은 순으로 랭킹이 결정됩니다.</p>
+          <div class="leaderboard-filter-tabs">
+            <button class="filter-tab active" data-filter="all">전체</button>
+            <button class="filter-tab" data-filter="mock">모의고사</button>
+            <button class="filter-tab" data-filter="survival">서바이벌</button>
+            <button class="filter-tab" data-filter="classic">클래식</button>
+            <button class="filter-tab" data-filter="timeattack">타임어택</button>
+          </div>
+          <p class="modal-caption">포인트(pt) 높은 순 &gt; 맞춘 개수 &gt; 소요 시간 순으로 랭킹이 결정됩니다.</p>
           
           <div class="table-container">
             <table class="leaderboard-table">
               <thead>
                 <tr>
-                  <th style="width: 15%;">순위</th>
-                  <th style="width: 35%;">닉네임</th>
-                  <th style="width: 25%;">점수</th>
-                  <th style="width: 25%;">소요 시간</th>
+                  <th style="width: 14%;">순위</th>
+                  <th style="width: 28%;">닉네임</th>
+                  <th style="width: 20%;">모드</th>
+                  <th style="width: 20%;">점수/정답</th>
+                  <th style="width: 18%;">소요시간</th>
                 </tr>
               </thead>
               <tbody id="leaderboardTableBody">
@@ -201,6 +365,34 @@
         <div class="modal-footer">
           <button id="clearLeaderboardBtn" class="btn btn-danger btn-sm">기록 초기화</button>
           <button id="closeModalBtn2" class="btn btn-secondary btn-sm">닫기</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. 오답노트 관리 모달 (Wrong Notes Modal) -->
+    <div id="wrongNotesModal" class="modal-overlay">
+      <div class="modal-card modal-large">
+        <div class="modal-header">
+          <div class="modal-title-wrap">
+            <span class="modal-icon">📝</span>
+            <h3>스마트 오답노트 (<span id="modalWrongCount">0</span>문제)</h3>
+          </div>
+          <button id="closeWrongNotesModalBtn" class="close-modal-btn" aria-label="닫기">&times;</button>
+        </div>
+
+        <div class="modal-body">
+          <p class="modal-caption">틀린 문제들이 여기에 자동 보관됩니다. 복습 모드에서 맞히면 자동으로 지워집니다.</p>
+          <div id="wrongNotesListContainer" class="wrong-notes-list">
+            <!-- 자바스크립트로 오답 리스트 렌더링 -->
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button id="clearAllWrongNotesBtn" class="btn btn-danger btn-sm">오답 전체 삭제</button>
+          <div class="footer-btn-group">
+            <button id="startWrongNotesQuizBtn" class="btn btn-primary btn-sm">🚀 오답만 다시 풀기</button>
+            <button id="closeWrongNotesModalBtn2" class="btn btn-secondary btn-sm">닫기</button>
+          </div>
         </div>
       </div>
     </div>

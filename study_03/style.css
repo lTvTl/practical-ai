@@ -1052,6 +1052,674 @@ body {
   border-bottom-right-radius: inherit;
 }
 
+/* ==========================================================================
+   5. 게임 모드 선택 UI (Game Modes Grid)
+   ========================================================================== */
+
+.mode-select-section {
+  width: 100%;
+  margin: 16px 0 20px;
+  text-align: left;
+}
+
+.section-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mode-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 540px) {
+  .mode-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.mode-card {
+  background: var(--bg-card);
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  user-select: none;
+}
+
+.mode-card:hover {
+  border-color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.mode-card.active {
+  border-color: var(--primary);
+  background: var(--primary-light);
+  box-shadow: 0 0 0 2px var(--primary-border), 0 8px 20px rgba(37, 99, 235, 0.15);
+}
+
+.mode-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.mode-icon {
+  font-size: 1.6rem;
+  line-height: 1;
+}
+
+.mode-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  letter-spacing: 0.3px;
+}
+
+.tag-standard {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border-color);
+}
+
+.tag-recommend {
+  background: linear-gradient(135deg, #7c3aed, #4f46e5);
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(124, 58, 237, 0.3);
+}
+
+.tag-hard {
+  background: #ef4444;
+  color: #ffffff;
+}
+
+.tag-speed {
+  background: #f59e0b;
+  color: #ffffff;
+}
+
+.tag-focus {
+  background: #10b981;
+  color: #ffffff;
+}
+
+.tag-note {
+  background: #6366f1;
+  color: #ffffff;
+}
+
+.mode-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+}
+
+.mode-card.active .mode-title {
+  color: var(--primary);
+}
+
+.mode-desc {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* 과목별 선택 칩 영역 */
+.subject-select-area {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  margin-top: 12px;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.subject-select-label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 8px;
+}
+
+.subject-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.chip-btn {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.chip-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.chip-btn.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+/* 점수 룰 뱃지 */
+.score-rule-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.score-pill {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 9999px;
+}
+
+.start-action-btn {
+  width: 100%;
+  max-width: 360px;
+}
+
+/* 인트로 하단 유틸리티 */
+.intro-bottom-utilities {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.util-btn {
+  font-size: 0.82rem;
+}
+
+/* ==========================================================================
+   6. 인게임 콤보 & 점수 시스템 UI
+   ========================================================================== */
+
+.mode-indicator-badge {
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  color: #ffffff;
+}
+
+.combo-badge-wrap {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: linear-gradient(135deg, #ef4444, #f59e0b);
+  color: #ffffff;
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  font-size: 0.8rem;
+  font-weight: 800;
+  animation: comboPop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.combo-badge-wrap.active {
+  display: inline-flex;
+}
+
+@keyframes comboPop {
+  0% { transform: scale(0.8); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.score-badge {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  padding: 5px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--primary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* 타임어택 카운트다운 게이지 */
+.timeattack-bar-container {
+  width: 100%;
+  height: 5px;
+  background: var(--bg-subtle);
+  border-radius: 9999px;
+  overflow: hidden;
+  margin-top: -18px;
+  margin-bottom: 20px;
+}
+
+.timeattack-bar-fill {
+  height: 100%;
+  background: #f59e0b;
+  transition: width 0.1s linear, background-color 0.2s ease;
+  border-radius: 9999px;
+}
+
+.timeattack-bar-fill.danger {
+  background: #ef4444;
+  animation: pulseDanger 0.5s infinite alternate;
+}
+
+@keyframes pulseDanger {
+  from { opacity: 1; }
+  to { opacity: 0.5; }
+}
+
+/* 점수 팝업 애니메이션 */
+.score-popup-wrapper {
+  position: absolute;
+  top: 140px;
+  right: 32px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.score-popup-item {
+  background: rgba(16, 185, 129, 0.95);
+  color: #ffffff;
+  font-size: 0.88rem;
+  font-weight: 800;
+  padding: 6px 12px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  animation: floatUp 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  margin-bottom: 6px;
+}
+
+@keyframes floatUp {
+  0% {
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(0) scale(1.05);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-12px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-24px) scale(0.9);
+  }
+}
+
+.feedback-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.earned-score-badge {
+  background: var(--success);
+  color: #ffffff;
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   7. 결과 화면 강화 (Tier, CBT Points, Mock Exam Report)
+   ========================================================================== */
+
+.result-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-weight: 800;
+  font-size: 1.05rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 4px;
+}
+
+.tier-s {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #ffffff;
+}
+
+.tier-a {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: #ffffff;
+}
+
+.tier-b {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: #ffffff;
+}
+
+.tier-c {
+  background: linear-gradient(135deg, #f97316, #ea580c);
+  color: #ffffff;
+}
+
+.tier-f {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #ffffff;
+}
+
+.cbt-points-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 10px 18px;
+  text-align: center;
+  width: 100%;
+}
+
+.points-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.points-number {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--primary);
+  line-height: 1.1;
+}
+
+.points-number .unit {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* 모의고사 과목별 과락 진단표 */
+.mock-exam-report {
+  width: 100%;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: left;
+  margin-top: 8px;
+}
+
+.report-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.subject-results-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.subject-result-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.subject-row-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.subject-name {
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.subject-score-badge {
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.badge-pass {
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
+}
+
+.badge-fail {
+  background: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
+}
+
+.subject-mini-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-subtle);
+  border-radius: 9999px;
+  overflow: hidden;
+}
+
+.subject-mini-fill {
+  height: 100%;
+  border-radius: 9999px;
+  transition: width 0.4s ease;
+}
+
+.subject-mini-fill.fill-pass {
+  background: var(--success);
+}
+
+.subject-mini-fill.fill-fail {
+  background: var(--error);
+}
+
+.mock-final-verdict {
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.verdict-pass {
+  background: var(--success-bg);
+  color: var(--success-text);
+  border: 1px solid var(--success-border);
+}
+
+.verdict-fail {
+  background: var(--error-bg);
+  color: var(--error-text);
+  border: 1px solid var(--error-border);
+}
+
+/* 오답노트 자동 저장 배너 */
+.wrong-note-banner {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  background: var(--bg-card);
+  border: 1px dashed var(--border-color);
+  border-radius: var(--radius-sm);
+  width: 100%;
+  justify-content: center;
+}
+
+.btn-warning {
+  background-color: #f59e0b;
+  color: #ffffff;
+}
+
+.btn-warning:hover:not(:disabled) {
+  background-color: #d97706;
+}
+
+/* ==========================================================================
+   8. 랭킹 모달 탭 및 오답노트 모달
+   ========================================================================== */
+
+.leaderboard-filter-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.filter-tab {
+  background: var(--bg-subtle);
+  border: 1px solid var(--border-color);
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.filter-tab:hover {
+  color: var(--text-main);
+}
+
+.filter-tab.active {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: #ffffff;
+}
+
+.modal-large {
+  max-width: 620px;
+}
+
+.wrong-notes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 440px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.wrong-note-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.wrong-note-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wrong-note-subject {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--primary);
+  background: var(--primary-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.delete-single-note-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 2px 6px;
+}
+
+.delete-single-note-btn:hover {
+  color: var(--error);
+  text-decoration: underline;
+}
+
+.wrong-note-q {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.45;
+}
+
+.wrong-note-answer {
+  font-size: 0.85rem;
+  color: var(--success);
+  font-weight: 600;
+  background: var(--success-bg);
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+}
+
+.wrong-note-exp {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.empty-wrong-notes {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-muted);
+  font-size: 0.95rem;
+}
+
+.footer-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
 /* 푸터 */
 .app-footer {
   text-align: center;
