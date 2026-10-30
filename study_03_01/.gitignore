@@ -1,0 +1,8 @@
+# PDF 및 대용량 파일 제외
+*.pdf
+*족보*
+*리눅스마스터2급_1차_족보_문제지_및_정답해설*
+*linux_master_1cha_practice_with_answers*
+extracted_*.txt
+extracted_*.json
+__pycache__/

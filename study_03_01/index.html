@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>리눅스마스터 2급 CBT & 합격 마스터</title>
+  
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body class="dark-theme">
+  <!-- Desktop Mobile Frame Wrapper (when mobile preview is toggled) -->
+  <div id="appViewport" class="app-viewport">
+    
+    <!-- Phone Mockup Frame (Active only when desktop mobile-emulator mode is toggled) -->
+    <div id="phoneShell" class="phone-shell">
+      <div class="phone-speaker"></div>
+      
+      <div class="app-container">
+        
+        <!-- 상단 헤더 / 유틸리티 바 -->
+        <header class="top-nav">
+          <div class="nav-brand" id="brandHomeBtn">
+            <span class="brand-logo">🐧</span>
+            <div class="brand-text">
+              <span class="brand-title">리눅스마스터 2급</span>
+              <span class="brand-badge">문제집 올인원 v2.0</span>
+            </div>
+          </div>
+
+          <!-- 차수 선택 필터 (헤더 퀵 스위처) -->
+          <div class="stage-selector-header">
+            <button class="stage-pill active" data-stage="all">전체</button>
+            <button class="stage-pill" data-stage="1차">1차 대비</button>
+            <button class="stage-pill" data-stage="2차">2차 대비</button>
+          </div>
+
+          <div class="nav-controls">
+            <!-- 데스크톱 스마트폰 뷰 시뮬레이션 토글 버튼 -->
+            <button id="mobileViewToggleBtn" class="icon-btn desktop-only" title="스마트폰 화면 미리보기 모드 전환">
+              <span class="icon">📱</span>
+            </button>
+            <button id="soundToggleBtn" class="icon-btn" title="효과음 켜기/끄기">
+              <span class="icon">🔊</span>
+            </button>
+            <button id="themeToggleBtn" class="icon-btn" title="다크/라이트 테마 전환">
+              <span class="icon">🌓</span>
+            </button>
+          </div>
+        </header>
+
+        <!-- 메인 네비게이션 탭 (데스크톱/태블릿) -->
+        <nav class="main-tabs desktop-tabs">
+          <button class="tab-btn active" data-view="home">
+            <span class="tab-icon">🎯</span>
+            <span class="tab-label">퀴즈 챌린지</span>
+          </button>
+          <button class="tab-btn" data-view="study">
+            <span class="tab-icon">📖</span>
+            <span class="tab-label">핵심 요약 정리관</span>
+          </button>
+          <button class="tab-btn" data-view="wrong">
+            <span class="tab-icon">❌</span>
+            <span class="tab-label">스마트 오답노트</span>
+            <span id="wrongCountBadge" class="count-badge hidden">0</span>
+          </button>
+          <button class="tab-btn" data-view="explorer">
+            <span class="tab-icon">🔍</span>
+            <span class="tab-label">전 문항 기출 사전</span>
+          </button>
+        </nav>
+
+        <!-- 메인 컨텐츠 영역 -->
+        <main class="content-area">
+          
+          <!-- 1. 홈 / 퀴즈 로비 뷰 -->
+          <section id="viewHome" class="app-view active">
+            <!-- 환영 배너 & 학습 진도 요약 -->
+            <div class="hero-card">
+              <div class="hero-content">
+                <div class="hero-badge-row">
+                  <span class="badge verified-pill">🛡️ AI 교차검증 완료 (486제)</span>
+                  <span class="badge time-pill">⏱️ 1차·2차 완전 분리 학습</span>
+                </div>
+                <h1 class="hero-title">리눅스마스터 2급 합격 솔루션</h1>
+                <p class="hero-desc">문제집 4대 영역(1차 기출, 1차 단답문제집, 2차 10대영역 400제, 핵심이론)을 전수 교차검증하여 실전 CBT 시험 환경으로 제공합니다.</p>
+              </div>
+              <div class="hero-stats">
+                <div class="stat-box">
+                  <span class="stat-num" id="statTotalSolved">0</span>
+                  <span class="stat-label">푼 문제</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-num" id="statAccuracy">0%</span>
+                  <span class="stat-label">정답률</span>
+                </div>
+                <div class="stat-box">
+                  <span class="stat-num text-danger" id="statWrongCount">0</span>
+                  <span class="stat-label">오답 수</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 현재 선택된 차수 표시 배너 -->
+            <div class="stage-banner">
+              <span class="stage-indicator" id="currentStageIndicator">🌟 전체 통합 모드 (1차 88제 + 2차 398제)</span>
+              <div class="stage-banner-btns">
+                <button class="btn-subtle" onclick="setAppStage('1차')">1차만 풀기</button>
+                <button class="btn-subtle" onclick="setAppStage('2차')">2차만 풀기</button>
+                <button class="btn-subtle" onclick="setAppStage('all')">통합 전체</button>
+              </div>
+            </div>
+
+                        <!-- 7대 퀴즈 및 연습 모드 카드 그리드 -->
+            <div class="mode-grid">
+              
+              <!-- 모드 0: 문제 풀고 즉시 해설 보는 학습형 연습 모드 -->
+              <div class="mode-card practice-card" onclick="startQuizMode('practice')">
+                <div class="mode-header">
+                  <span class="mode-icon">💡</span>
+                  <span class="mode-tag popular">추천 연습모드</span>
+                </div>
+                <h3 class="mode-name">연습 모드 (즉시 해설)</h3>
+                <p class="mode-desc">문제를 풀자마자 정답 여부와 명령어 속성 상세 해설을 바로 확인! 정답 먼저 보기도 가능하여 학습 효율을 극대화합니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec" id="practiceModeSpec">즉시 채점 & 전 문항 해설</span>
+                  <button class="mode-start-btn">연습 시작 →</button>
+                </div>
+              </div>
+              
+              <!-- 모드 1: 실전 CBT 모의고사 -->
+              <div class="mode-card primary-card" onclick="startQuizMode('cbt')">
+                <div class="mode-header">
+                  <span class="mode-icon">📋</span>
+                  <span class="mode-tag popular">추천 모드</span>
+                </div>
+                <h3 class="mode-name">실전 CBT 모의고사</h3>
+                <p class="mode-desc">실제 시험 규정과 동일하게 60점 이상 합격선 판정 및 40점 과락 방지 진단표를 제공합니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec" id="cbtModeSpec">1차: 20문항 / 2차: 40문항</span>
+                  <button class="mode-start-btn">시험 시작 →</button>
+                </div>
+              </div>
+
+              <!-- 모드 2: 서바이벌 데스매치 -->
+              <div class="mode-card survival-card" onclick="startQuizMode('survival')">
+                <div class="mode-header">
+                  <span class="mode-icon">⚡</span>
+                  <span class="mode-tag danger">1-Life 극한</span>
+                </div>
+                <h3 class="mode-name">서바이벌 데스매치</h3>
+                <p class="mode-desc">단 한 번의 오답으로 즉시 탈락! 극도의 긴장감 속에서 최대 연속 정답 기록(Streak)을 세웁니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec">오답 즉시 종료</span>
+                  <button class="mode-start-btn">도전하기 →</button>
+                </div>
+              </div>
+
+              <!-- 모드 3: 10초 타임어택 -->
+              <div class="mode-card timeattack-card" onclick="startQuizMode('timeattack')">
+                <div class="mode-header">
+                  <span class="mode-icon">⏱️</span>
+                  <span class="mode-tag warning">스피드 훈련</span>
+                </div>
+                <h3 class="mode-name">10초 타임어택</h3>
+                <p class="mode-desc">문제당 10초 카운트다운! 지문에서 핵심 리눅스 명령어를 직관적으로 포착하는 순발력을 훈련합니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec">문제당 10초 제한</span>
+                  <button class="mode-start-btn">스피드 런 →</button>
+                </div>
+              </div>
+
+              <!-- 모드 4: 과목/챕터별 집중 공략 -->
+              <div class="mode-card subject-card" onclick="openSubjectModal()">
+                <div class="mode-header">
+                  <span class="mode-icon">🎯</span>
+                  <span class="mode-tag info">취약점 마스터</span>
+                </div>
+                <h3 class="mode-name">과목/챕터별 집중 공략</h3>
+                <p class="mode-desc">파일시스템, 쉘, 프로세스, 에디터, 패키지관리, X윈도, 네트워크 등 원하는 영역만 골라 학습합니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec">11개 세부 챕터</span>
+                  <button class="mode-start-btn">영역 선택 →</button>
+                </div>
+              </div>
+
+              <!-- 모드 5: AI 교차검증 킬러문항 -->
+              <div class="mode-card killer-card" onclick="startQuizMode('killer')">
+                <div class="mode-header">
+                  <span class="mode-icon">🛡️</span>
+                  <span class="mode-tag verified">정답률 40% 이하</span>
+                </div>
+                <h3 class="mode-name">교차검증 킬러문항 챌린지</h3>
+                <p class="mode-desc">수험생이 가장 많이 헷갈리는 umask 계산, 특수권한(SetUID/Sticky), 시그널 번호, 서브넷팅 함정 문제를 공략합니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec">엄선 고난도 30제</span>
+                  <button class="mode-start-btn">킬러 공략 →</button>
+                </div>
+              </div>
+
+              <!-- 모드 6: 스마트 오답 집중 재시험 -->
+              <div class="mode-card wrong-card" onclick="startQuizMode('wrong_retry')">
+                <div class="mode-header">
+                  <span class="mode-icon">🔄</span>
+                  <span class="mode-tag accent">오답 제로 프로젝트</span>
+                </div>
+                <h3 class="mode-name">오답노트 집중 재시험</h3>
+                <p class="mode-desc">학습 중 틀렸던 문제들만 자동으로 모아 완전히 내 것이 될 때까지 반복 훈련합니다.</p>
+                <div class="mode-footer">
+                  <span class="mode-spec" id="wrongModeSpec">오답 0문제 누적</span>
+                  <button class="mode-start-btn">오답 정복 →</button>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 하단 퀵 링크 배너: 핵심 요약집 바로가기 -->
+            <div class="quick-study-banner" onclick="switchView('study')">
+              <div class="quick-study-text">
+                <span class="qs-badge">📚 시험장 10분 전 필수</span>
+                <h4>문제를 풀기 전에 핵심 개념을 먼저 읽고 싶으신가요?</h4>
+                <p>1차 단기 암기장 및 2차 10대 핵심 챕터 총정리 요약관으로 바로 이동합니다.</p>
+              </div>
+              <span class="qs-arrow">요약 읽기 ➔</span>
+            </div>
+          </section>
+
+
+          <!-- 2. 퀴즈 실행 뷰 (Quiz Active View) -->
+          <section id="viewQuiz" class="app-view">
+            <!-- 퀴즈 상태 표시 헤더 -->
+            <div class="quiz-top-bar">
+              <div class="quiz-progress-wrap">
+                <div class="progress-labels">
+                  <span class="progress-step" id="quizProgressText">문제 1 / 20</span>
+                  <span class="progress-streak" id="quizStreakText">🔥 0 연승</span>
+                </div>
+                <div class="progress-track">
+                  <div class="progress-fill" id="quizProgressFill" style="width: 5%;"></div>
+                </div>
+              </div>
+
+              <div class="quiz-status-badges">
+                <span class="badge stage-badge" id="quizStageBadge">1차</span>
+                <span class="badge subject-badge" id="quizSubjectBadge">리눅스 일반</span>
+                <span class="badge timer-badge hidden" id="quizTimerBadge">⏱️ 10초</span>
+                <button class="bookmark-btn" id="bookmarkBtn" title="이 문제 북마크">🔖</button>
+              </div>
+            </div>
+
+            <!-- 문제 카드 -->
+            <div class="question-card" id="questionCard">
+              <div class="question-header">
+                <div class="q-header-left">
+                  <span class="q-number" id="qNumber">Q.1</span>
+                  <span class="q-verified-tag" title="공식 man page 및 기출 교차검증 완료">🛡️ AI 교차검증 완료</span>
+                </div>
+                <div class="q-header-actions">
+                  <button class="btn-subtle practice-only-btn" id="revealPracticeAnsBtn" title="문제를 풀지 않고 정답과 상세 해설을 바로 확인합니다">💡 정답 & 해설 바로보기</button>
+                </div>
+              </div>
+              
+              <div class="question-body">
+                <div class="question-text" id="questionText">문제 지문이 여기에 로드됩니다.</div>
+              </div>
+
+              <!-- 4개 선택지 -->
+              <div class="options-list" id="optionsList">
+                <!-- 옵션 버튼들은 JS로 동적 생성됨 -->
+              </div>
+
+              <!-- 해설 및 즉시 피드백 박스 -->
+              <div class="explanation-box hidden" id="explanationBox">
+                <div class="exp-header">
+                  <span class="exp-title" id="expResultTitle">정답입니다! 🎉</span>
+                  <span class="exp-verified-badge" id="expVerifiedNote"></span>
+                </div>
+                <div class="exp-content" id="expContent">
+                  해설 내용이 여기에 표시됩니다.
+                </div>
+                <div class="exp-actions">
+                  <button class="btn-primary" id="nextQuestionBtn">다음 문제로 이동 ➔</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 퀴즈 하단 컨트롤 바 -->
+            <div class="quiz-bottom-controls">
+              <button class="btn-ghost" id="quizQuitBtn">✕ 시험 종료</button>
+              <div class="quiz-nav-btns">
+                <button class="btn-secondary" id="quizPrevBtn">◀ 이전</button>
+                <button class="btn-secondary" id="quizSkipBtn">건너뛰기 ▶</button>
+                <button class="btn-primary" id="quizSubmitBtn">최종 제출 📋</button>
+              </div>
+            </div>
+          </section>
+
+
+          <!-- 3. 핵심 요약 정리관 뷰 (Study Hub View) -->
+          <section id="viewStudy" class="app-view">
+            <div class="study-header-card">
+              <div class="study-title-row">
+                <div class="study-titles">
+                  <h2>📖 리눅스마스터 2급 핵심 요약 정리관</h2>
+                  <p>문제집 2개 파일의 전 챕터(1차 필수 역사/라이선스 + 2차 10대 핵심 챕터)를 언제 어디서나 스마트폰과 PC에서 읽을 수 있도록 정리했습니다.</p>
+                </div>
+                <div class="study-quick-actions">
+                  <button class="btn-subtle" id="expandAllChaptersBtn">전체 펼치기</button>
+                  <button class="btn-subtle" id="collapseAllChaptersBtn">전체 접기</button>
+                </div>
+              </div>
+
+              <!-- 검색 및 필터 바 -->
+              <div class="study-filter-bar">
+                <div class="search-input-wrap">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" id="studySearchInput" placeholder="명령어, 옵션, 키워드 검색 (예: chmod, crontab, resolv.conf, GPL, QNX)...">
+                  <button class="clear-search-btn hidden" id="clearStudySearchBtn">✕</button>
+                </div>
+                <div class="study-stage-pills">
+                  <button class="study-pill active" data-study-stage="all">전체 챕터</button>
+                  <button class="study-pill" data-study-stage="1차">1차 필수 암기장</button>
+                  <button class="study-pill" data-study-stage="2차">2차 10대 챕터</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 챕터 아코디언 컨테이너 -->
+            <div class="study-chapters-container" id="studyChaptersContainer">
+              <!-- JS로 11개 챕터 동적 렌더링 -->
+            </div>
+          </section>
+
+
+          <!-- 4. 스마트 오답노트 뷰 (Wrong Note View) -->
+          <section id="viewWrong" class="app-view">
+            <div class="wrong-header-card">
+              <div class="wrong-title-row">
+                <div>
+                  <h2>❌ 스마트 오답노트</h2>
+                  <p>틀린 문제는 로컬 스토리지에 자동 수집됩니다. 반복 학습을 통해 오답률 0%에 도전하세요!</p>
+                </div>
+                <div class="wrong-header-actions">
+                  <button class="btn-primary" id="retryWrongQuestionsBtn">오답만 모아서 재시험 보기 ➔</button>
+                  <button class="btn-danger-outline" id="clearWrongNotesBtn">오답노트 비우기</button>
+                </div>
+              </div>
+
+              <!-- 필터 탭 -->
+              <div class="wrong-filter-tabs">
+                <button class="wrong-filter-btn active" data-wrong-stage="all">전체 오답 (<span id="wrongFilterAllCount">0</span>)</button>
+                <button class="wrong-filter-btn" data-wrong-stage="1차">1차 오답 (<span id="wrongFilter1Count">0</span>)</button>
+                <button class="wrong-filter-btn" data-wrong-stage="2차">2차 오답 (<span id="wrongFilter2Count">0</span>)</button>
+              </div>
+            </div>
+
+            <!-- 오답 리스트 -->
+            <div class="wrong-list-container" id="wrongListContainer">
+              <!-- JS로 동적 렌더링 -->
+            </div>
+          </section>
+
+
+          <!-- 5. 전 문항 기출 사전 뷰 (Question Explorer View) -->
+          <section id="viewExplorer" class="app-view">
+            <div class="explorer-header-card">
+              <h2>🔍 전 문항 기출 사전 (486제)</h2>
+              <p>문제집에서 추출 및 교차검증된 486개 전 문항을 키워드 및 과목별로 편리하게 검색하고 해설을 열람하세요.</p>
+              
+              <div class="explorer-search-bar">
+                <div class="search-input-wrap">
+                  <span class="search-icon">🔍</span>
+                  <input type="text" id="explorerSearchInput" placeholder="문제 지문, 보기, 해설 검색 (예: /etc/passwd, kill, vi, 포트)...">
+                  <button class="clear-search-btn hidden" id="clearExplorerSearchBtn">✕</button>
+                </div>
+                <select id="explorerStageSelect" class="styled-select">
+                  <option value="all">전체 차수</option>
+                  <option value="1차">1차 시험 문제만</option>
+                  <option value="2차">2차 시험 문제만</option>
+                </select>
+                <select id="explorerChapterSelect" class="styled-select">
+                  <option value="all">전체 챕터</option>
+                  <!-- JS로 채워짐 -->
+                </select>
+              </div>
+              <div class="explorer-stats-line">
+                검색 결과: <strong id="explorerMatchCount">486</strong>문항
+              </div>
+            </div>
+
+            <!-- 문항 리스트 -->
+            <div class="explorer-list-container" id="explorerListContainer">
+              <!-- JS로 동적 렌더링 -->
+            </div>
+          </section>
+
+
+          <!-- 6. 시험 결과 뷰 (Result View) -->
+          <section id="viewResult" class="app-view">
+            <div class="result-card">
+              <div class="result-verdict-badge" id="resultVerdictBadge">
+                <span class="verdict-icon" id="resultVerdictIcon">🎉</span>
+                <span class="verdict-text" id="resultVerdictText">최종 합격</span>
+              </div>
+
+              <div class="score-display">
+                <div class="score-circle">
+                  <span class="score-number" id="resultScoreNum">85</span>
+                  <span class="score-max">/ 100점</span>
+                </div>
+                <div class="score-meta">
+                  <div class="meta-row">
+                    <span class="meta-label">시험 모드:</span>
+                    <strong class="meta-val" id="resultModeName">실전 CBT 모의고사</strong>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">응시 차수:</span>
+                    <strong class="meta-val" id="resultStageName">2차 시험 대비</strong>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">소요 시간:</span>
+                    <strong class="meta-val" id="resultDuration">12분 40초</strong>
+                  </div>
+                  <div class="meta-row">
+                    <span class="meta-label">정답 / 오답:</span>
+                    <strong class="meta-val" id="resultCorrectRatio">34개 정답 / 6개 오답</strong>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 과목별 과락 진단표 -->
+              <div class="result-breakdown-section">
+                <h3>📊 과목별 성적 및 과락 진단 (과락 기준: 40점 미만)</h3>
+                <div class="breakdown-list" id="resultBreakdownList">
+                  <!-- JS로 동적 생성 -->
+                </div>
+              </div>
+
+              <!-- 액션 버튼들 -->
+              <div class="result-actions">
+                <button class="btn-primary" id="resultReviewWrongBtn">오답 복습하기 (오답노트) ➔</button>
+                <button class="btn-secondary" id="resultRetryBtn">같은 모드 다시 풀기 🔄</button>
+                <button class="btn-ghost" onclick="switchView('home')">메인 홈으로 이동 🏠</button>
+              </div>
+            </div>
+          </section>
+
+        </main>
+
+        <!-- 스마트폰 환경 전용 하단 고정 네비게이션 바 (Mobile Bottom Navigation) -->
+        <nav class="mobile-bottom-nav">
+          <button class="bottom-nav-item active" data-mobile-view="home">
+            <span class="b-icon">🏠</span>
+            <span class="b-label">홈</span>
+          </button>
+          <button class="bottom-nav-item" data-mobile-view="stage1">
+            <span class="b-icon">1️⃣</span>
+            <span class="b-label">1차 모의</span>
+          </button>
+          <button class="bottom-nav-item" data-mobile-view="stage2">
+            <span class="b-icon">2️⃣</span>
+            <span class="b-label">2차 모의</span>
+          </button>
+          <button class="bottom-nav-item" data-mobile-view="study">
+            <span class="b-icon">📖</span>
+            <span class="b-label">요약집</span>
+          </button>
+          <button class="bottom-nav-item" data-mobile-view="wrong">
+            <span class="b-icon">❌</span>
+            <span class="b-label">오답노트</span>
+            <span id="mobileWrongBadge" class="b-badge hidden">0</span>
+          </button>
+        </nav>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- 과목/챕터 선택 모달 -->
+  <div class="modal-overlay hidden" id="subjectModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>🎯 공략할 영역/챕터를 선택하세요</h3>
+        <button class="modal-close-btn" onclick="closeSubjectModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="subject-selection-list" id="subjectSelectionList">
+          <!-- JS로 동적 렌더링 -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 데이터 스크립트 로드 -->
+  <script src="questions.js"></script>
+  <script src="study_data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

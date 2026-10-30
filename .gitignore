@@ -16,3 +16,10 @@ dist/
 Thumbs.db
 .vscode/
 .idea/
+# 문제집 원본 PDF 및 중간 추출 파일 제외
+*.pdf
+*족보*
+study_03_01/*.pdf
+study_03_01/extracted_*.txt
+*리눅스마스터2급_1차_족보_문제지_및_정답해설*
+*linux_master_1cha_practice_with_answers*
