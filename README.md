@@ -1,18 +1,32 @@
 # Practical AI (인공지능응용 실습 프로젝트)
 
 본 저장소는 **인공지능응용(Practical AI)** 실습 과제 및 결과물을 관리하는 저장소입니다.  
-독립적인 네 개의 프로그램(`study_01`, `study_02`, `study_03`, `study_03_01`)으로 구성되어 있습니다.
+독립적인 여섯 개의 프로그램(`study_01`, `study_02`, `study_03`, `study_03_01`, `study_04`, `study_05`)으로 구성되어 있습니다.
+
+> 📸 **프로그램을 실행하지 않고 화면으로 바로 보고 싶다면 → [실행 화면 갤러리 (SCREENSHOTS.md)](./SCREENSHOTS.md)**
 
 ---
 
 ## 📂 프로젝트 구성 요약
 
-| 프로젝트 | 프로그램 명 | 설명 | 기술 스택 |
-| :--- | :--- | :--- | :--- |
-| **[`study_01`](./study_01/)** | **손글씨 숫자 인식 프로그램** | 캔버스에 직접 숫자를 그려 머신러닝으로 인식하는 데스크톱 GUI 프로그램 | Python, Scikit-learn, Tkinter, Pillow |
-| **[`study_02`](./study_02/)** | **개인용 할 일 관리 애플리케이션** | 매일 10~20개의 할 일을 스마트하게 관리하는 모던 웹 애플리케이션 | HTML5, CSS3, Vanilla JavaScript (LocalStorage) |
-| **[`study_03`](./study_03/)** | **정보처리기사 기출 퀴즈 게임** | 600문항 기출문제 은행과 6대 실전 게임 모드로 무장한 CBT 웹 퀴즈 게임 | HTML5, CSS3, Vanilla JS, Web Audio API |
-| **[`study_03_01`](./study_03_01/)** | **리눅스마스터 2급 CBT & 합격 마스터** | 486개 기출 전수 교차검증 문항, 11개 챕터 요약정리, 모바일 완전 오프라인 지원 올인원 CBT | HTML5, CSS3, Vanilla JS, Web Audio API |
+프로젝트는 **실행 방식**에 따라 세 가지로 나뉩니다.
+
+| 분류 | 설명 | 필요한 것 |
+| :--- | :--- | :--- |
+| 🖥️ **데스크톱 앱** | 내 컴퓨터에서 창으로 실행되는 프로그램 | Python과 라이브러리 설치 |
+| 🌐 **웹 앱** | 서버 없이 `index.html`만 열면 바로 실행 | 웹 브라우저 |
+| 🤖 **AI 연동 웹 앱** | 서버(Flask)가 AI 서비스(OpenRouter)를 호출 | Python, OpenRouter API 키(`.env`) |
+
+| 분류 | 프로젝트 | 프로그램 명 | 설명 | 기술 스택 | 실행 화면 |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| 🖥️ 데스크톱 | **[`study_01`](./study_01/)** | **손글씨 숫자 인식 프로그램** | 캔버스에 직접 숫자를 그려 머신러닝으로 인식하는 데스크톱 GUI 프로그램 | Python, Scikit-learn, Tkinter, Pillow | [보기](./study_01/SCREENSHOTS.md) |
+| 🌐 웹 | **[`study_02`](./study_02/)** | **개인용 할 일 관리 애플리케이션** | 매일 10~20개의 할 일을 스마트하게 관리하는 모던 웹 애플리케이션 | HTML5, CSS3, Vanilla JavaScript (LocalStorage) | [보기](./study_02/SCREENSHOTS.md) |
+| 🌐 웹 | **[`study_03`](./study_03/)** | **정보처리기사 기출 퀴즈 게임** | 600문항 기출문제 은행과 6대 실전 게임 모드로 무장한 CBT 웹 퀴즈 게임 | HTML5, CSS3, Vanilla JS, Web Audio API | [보기](./study_03/SCREENSHOTS.md) |
+| 🌐 웹 | **[`study_03_01`](./study_03_01/)** | **리눅스마스터 2급 CBT & 합격 마스터** | 486개 기출 전수 교차검증 문항, 11개 챕터 요약정리, 모바일 완전 오프라인 지원 올인원 CBT | HTML5, CSS3, Vanilla JS, Web Audio API | [보기](./study_03_01/SCREENSHOTS.md) |
+| 🤖 AI 웹 | **[`study_04`](./study_04/)** | **냉장고 파먹기 AI 셰프** | 냉장고 사진에서 식재료를 인식해 맞춤 레시피와 요리 이미지를 만들고 레시피북에 저장하는 AI 웹 앱 | Python, Flask, OpenRouter API, Pillow | [보기](./study_04/SCREENSHOTS.md) |
+| 🤖 AI 웹 | **[`study_05`](./study_05/)** | **AI 공감 다이어리 / PDF 문서 요약** | 일기에 공감해 주는 AI 다이어리와, PDF를 요약해 주는 AI 웹 앱 두 가지 | Python, Flask, pypdf, OpenRouter API | [보기](./study_05/SCREENSHOTS.md) |
+
+> `study_04`, `study_05`의 상세 설명은 아래 5, 6번 섹션과 각 폴더의 README([`study_04`](./study_04/README.md), [`study_05`](./study_05/README.md))를 참고하세요.
 
 ---
 
@@ -164,12 +178,69 @@ python test_manual_workflow.py
 
 ---
 
+## 5. [study_04] 냉장고 파먹기 AI 셰프 (Fridge-to-Recipe AI)
+
+OpenRouter API로 **냉장고 사진 속 식재료를 인식**하고, **맞춤 레시피와 요리 이미지를 생성**한 뒤, **프로필별 레시피북**에 저장·관리하는 풀스택 AI 웹 애플리케이션입니다.
+
+### ✨ 주요 기능
+- **1단계 · 식재료 인식:** 사진 업로드/드래그앤드롭/샘플 사진으로 식재료명·카테고리·수량 자동 추출, 태그 추가·수정·삭제, 기본 보유 양념 선택
+- **2단계 · 레시피 & 요리 이미지 생성:** 요리 테마·시간·난이도·인분 설정, 인분별 계량 자동 변환, 단계별 조리 체크리스트, AI 완성 요리 이미지, 알레르기·기피 재료 자동 제외
+- **3단계 · 프로필 & 레시피북:** 다중 프로필, 레시피 저장·즐겨찾기·별점·메모, 통계 대시보드, 검색/필터, JSON 백업·복원
+
+### 🛠️ 기술 스택
+- **Backend**: Python, Flask, httpx, Pillow
+- **AI**: OpenRouter API (`inclusionai/ling-3.2-flash:free`, `recraft/recraft-v4.1-flash-v2:free`)
+- **Frontend**: 순수 HTML5, CSS3, Vanilla JavaScript
+- **Storage**: 서버 측 JSON 파일(프로필·레시피북)
+
+### 🚀 실행 방법
+```powershell
+cd study_04
+pip install -r requirements.txt
+# .env 파일에 OPENROUTER_API_KEY 저장 (.env.example 참고)
+python server.py
+```
+브라우저에서 `http://127.0.0.1:5000` 에 접속합니다. 자세한 내용은 [`study_04/README.md`](./study_04/README.md), 실행 화면은 [`study_04/SCREENSHOTS.md`](./study_04/SCREENSHOTS.md)를 참고하세요.
+
+---
+
+## 6. [study_05] AI 공감 다이어리 & PDF 문서 요약 (Empathy Diary & PDF Summarizer)
+
+OpenRouter API를 활용한 AI 웹 애플리케이션 두 가지입니다.
+
+### 📔 AI 공감 다이어리
+- 한 줄 일기를 쓰면 AI가 **감정(이모지·강도)을 분석**하고 **공감·위로 메시지**를 생성
+- 일기는 브라우저 `localStorage`에 보관, 위기 표현이 있으면 전문 상담 안내(109)를 함께 표시
+- 실행: `python server.py` → `http://127.0.0.1:5000`
+
+### 📄 PDF 문서 요약
+- PDF를 드래그앤드롭으로 올리면 **한 줄 요약 · 핵심 요점 · 상세 요약**을 생성 (요약 길이 선택, 긴 문서는 나눠서 요약 후 통합)
+- 업로드 검증(10MB, 100쪽), 개인정보 안내, 서버에 문서 비저장
+- 실행: `python server_pdf.py` → `http://127.0.0.1:5001`
+
+### 🛠️ 기술 스택
+- **Backend**: Python, Flask, httpx, pypdf
+- **AI**: OpenRouter API (`inclusionai/ling-3.2-flash:free`)
+- **Frontend**: 순수 HTML5, CSS3, Vanilla JavaScript (파일 하나에 통합)
+
+### 🚀 실행 방법
+```powershell
+cd study_05
+pip install -r requirements.txt        # 다이어리 / PDF 요약은 requirements_pdf.txt
+# .env 파일에 OPENROUTER_API_KEY 저장 (.env.example 참고)
+python server.py                       # 다이어리 / PDF 요약은 python server_pdf.py
+```
+자세한 내용은 [`study_05/README.md`](./study_05/README.md), 실행 화면은 [`study_05/SCREENSHOTS.md`](./study_05/SCREENSHOTS.md)를 참고하세요.
+
+---
+
 ## 📂 저장소 디렉터리 구조
 
 ```text
 Practical_AI/
 ├── .gitignore                     # 불필요한 빌드/캐시/대용량 파일 제외 설정
 ├── README.md                      # 저장소 전체 안내 및 프로젝트 설명서
+├── SCREENSHOTS.md                 # 전체 프로젝트 실행 화면 갤러리
 ├── study_01/                      # [프로젝트 1] 손글씨 숫자 인식 프로그램 (Python/GUI)
 │   ├── digit_recognition.py       # 머신러닝 모델 로드 및 예측 클래스
 │   ├── gui.py                     # Tkinter GUI 및 캔버스 이미지 변환 유틸리티
@@ -192,15 +263,36 @@ Practical_AI/
 │   ├── .antigravity/commands/     # Antigravity 전용 커스텀 슬래시 명령어
 │   ├── PRD.md                     # 제품 요구사항 정의서 (기획서 v2.0)
 │   └── README.md                  # study_03 상세 매뉴얼
-└── study_03_01/                   # [프로젝트 4] 리눅스마스터 2급 CBT & 합격 마스터 (Web/Mobile)
-    ├── index.html                 # 메인 반응형 웹 애플리케이션 화면
-    ├── linux_master_offline.html  # [모바일 완전 오프라인] 단일 파일 무서버 올인원 버전
-    ├── style.css                  # 모바일 퍼스트 CSS, 테마 시스템, 스마트폰 목업 뷰
-    ├── app.js                     # 7대 모드 제어, 복수정답 엔진, 오답노트, Web Audio 사운드
-    ├── questions.js               # 486문항 전수 교차검증 기출문제 은행
-    ├── study_data.js              # 11개 챕터 합격 핵심 요약 정리 데이터베이스
-    ├── bundle_offline.py          # 단일 HTML 번들 자동화 빌더
-    ├── VERIFICATION_REPORT.md     # 정답 교차검증 및 URL/공백 정제 기술 감사 보고서
-    ├── PRD.md                     # 제품 요구사항 정의서 v2.0
-    └── README.md                  # 사용자 매뉴얼 및 모바일 실행 가이드
+├── study_03_01/                   # [프로젝트 4] 리눅스마스터 2급 CBT & 합격 마스터 (Web/Mobile)
+│   ├── index.html                 # 메인 반응형 웹 애플리케이션 화면
+│   ├── linux_master_offline.html  # [모바일 완전 오프라인] 단일 파일 무서버 올인원 버전
+│   ├── style.css                  # 모바일 퍼스트 CSS, 테마 시스템, 스마트폰 목업 뷰
+│   ├── app.js                     # 7대 모드 제어, 복수정답 엔진, 오답노트, Web Audio 사운드
+│   ├── questions.js               # 486문항 전수 교차검증 기출문제 은행
+│   ├── study_data.js              # 11개 챕터 합격 핵심 요약 정리 데이터베이스
+│   ├── bundle_offline.py          # 단일 HTML 번들 자동화 빌더
+│   ├── VERIFICATION_REPORT.md     # 정답 교차검증 및 URL/공백 정제 기술 감사 보고서
+│   ├── PRD.md                     # 제품 요구사항 정의서 v2.0
+│   └── README.md                  # 사용자 매뉴얼 및 모바일 실행 가이드
+├── study_04/                      # [프로젝트 5] 냉장고 파먹기 AI 셰프 (Flask + AI)
+│   ├── server.py                  # Flask 서버 및 API 라우트
+│   ├── step1_vision.py            # 1단계: 사진 속 식재료 인식
+│   ├── step2_recipe.py            # 2단계: 레시피·요리 이미지 생성
+│   ├── step3_profile.py           # 3단계: 프로필·레시피북 저장소
+│   ├── config.py                  # 환경변수·API 설정
+│   ├── index.html / style.css / app.js   # 웹 화면
+│   ├── prd_step1~3.md             # 단계별 기획서(PRD)
+│   ├── test_*.py                  # 테스트 스크립트
+│   ├── SCREENSHOTS.md             # 실행 화면 모음
+│   └── README.md                  # study_04 상세 매뉴얼
+└── study_05/                      # [프로젝트 6] AI 공감 다이어리 & PDF 문서 요약 (Flask + AI)
+    ├── index.html / server.py     # 공감 다이어리 화면·서버
+    ├── index_pdf.html             # PDF 요약 화면
+    ├── server_pdf.py              # PDF 요약 서버
+    ├── pdf_extract.py             # PDF 텍스트 추출·검증
+    ├── summarizer_pdf.py          # OpenRouter 요약 모듈
+    ├── test_*.py                  # 서버·요약 모듈 테스트
+    ├── PRD_pdf.md                 # PDF 요약 기획서(PRD)
+    ├── SCREENSHOTS.md             # 실행 화면 모음
+    └── README.md                  # study_05 상세 매뉴얼
 ```
