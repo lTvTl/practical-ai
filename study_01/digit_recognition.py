@@ -2,7 +2,12 @@
 Handwritten digit recognition using machine learning.
 
 This module provides a DigitRecognizer class that uses sklearn
-to train and make predictions on handwritten digits from the MNIST dataset.
+to train and make predictions on handwritten digits from scikit-learn's
+`digits` dataset (8x8 images, not the 28x28 MNIST dataset).
+
+Data format the model expects: 64 values in [0, 1], where 1.0 is a bright stroke
+and 0.0 is the dark background. Each digit fills all 8 rows of the grid and is
+centred horizontally (see gui.preprocess_canvas_for_model).
 """
 
 import numpy as np
@@ -26,7 +31,8 @@ class DigitRecognizer:
 
     def load_mnist_data(self, split='train'):
         """
-        Load handwritten digit data from sklearn's digits dataset.
+        Load handwritten digit data from sklearn's digits dataset (despite the
+        method name this is not MNIST).
 
         Arguments:
             split: Either 'train' or 'test'. Determines which subset to return.

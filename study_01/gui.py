@@ -2,24 +2,118 @@
 GUI utilities for the digit recognition application.
 
 Provides DrawingCanvas class for managing pixel data and drawing operations,
-and functions to convert canvas drawings to MNIST-compatible format
-for use with the DigitRecognizer model.
+and functions to convert canvas drawings to the 8x8 format the
+DigitRecognizer model was trained on.
 """
 
 import tkinter as tk
 from tkinter import messagebox
 import numpy as np
 from PIL import Image, ImageDraw
+from scipy import ndimage
 from digit_recognition import DigitRecognizer
+
+# --- Model input format -------------------------------------------------------
+# These values describe how the training digits (sklearn `load_digits`) look and
+# were measured from that dataset: every digit is scaled to fill all 8 rows, it
+# is centred horizontally, and the two outer columns are (almost) always empty.
+MODEL_GRID_SIZE = 8
+MAX_DIGIT_WIDTH_CELLS = 6
+# A pen stroke should be about this fraction of the digit's height. The 3px brush
+# on a 400px canvas is far thinner than the strokes the model was trained on.
+TARGET_STROKE_RATIO = 0.25
+# Drawings whose longest side is below this many canvas pixels are not digits
+# (e.g. a single click).
+MIN_DRAWING_EXTENT_PX = 12
+# Pixels at or above this value count as empty background.
+BACKGROUND_THRESHOLD = 250
+# Working resolution (pixels per model cell) used while rescaling.
+_WORK_CELL_PX = 50
+
+
+def preprocess_canvas_for_model(canvas_data):
+    """
+    Convert a canvas drawing into the (1, 64) input the model expects.
+
+    The canvas has black strokes on a white background. The model was trained on
+    8x8 digits with bright strokes on a dark background, each digit filling the
+    full height of the grid. This function therefore:
+
+    1. inverts the image (strokes become bright, background 0),
+    2. crops to the drawn area so position and size do not matter,
+    3. thickens strokes that are much thinner than the training digits,
+    4. scales the digit to 8 rows high (at most 6 columns wide) and centres it,
+    5. reduces it to 8x8 and normalises the brightest pixel to 1.0.
+
+    Arguments:
+        canvas_data: numpy array (height, width), uint8, 255 = white background.
+
+    Returns:
+        numpy array of shape (1, 64), float32, values in [0, 1].
+
+    Raises:
+        ValueError: If nothing, or only something too small to be a digit, was drawn.
+    """
+    canvas = np.asarray(canvas_data)
+    drawn = canvas < BACKGROUND_THRESHOLD
+    if not drawn.any():
+        raise ValueError("Canvas is empty. Please draw a digit before making a prediction.")
+
+    rows = np.where(drawn.any(axis=1))[0]
+    cols = np.where(drawn.any(axis=0))[0]
+    height = rows[-1] - rows[0] + 1
+    width = cols[-1] - cols[0] + 1
+    if max(height, width) < MIN_DRAWING_EXTENT_PX:
+        raise ValueError("The drawing is too small. Please draw a larger digit.")
+
+    ink = np.where(drawn, 255 - canvas.astype(np.int16), 0).clip(0, 255).astype(np.uint8)
+    ink = ink[rows[0]:rows[-1] + 1, cols[0]:cols[-1] + 1]
+    ink = _thicken_thin_strokes(ink)
+
+    height, width = ink.shape
+    scale = min(MODEL_GRID_SIZE / height, MAX_DIGIT_WIDTH_CELLS / width)
+    new_w = max(1, round(width * scale * _WORK_CELL_PX))
+    new_h = max(1, round(height * scale * _WORK_CELL_PX))
+    digit = Image.fromarray(ink, mode='L').resize((new_w, new_h), Image.BOX)
+
+    work = MODEL_GRID_SIZE * _WORK_CELL_PX
+    framed = np.zeros((work, work), dtype=np.uint8)
+    top, left = (work - new_h) // 2, (work - new_w) // 2
+    framed[top:top + new_h, left:left + new_w] = np.asarray(digit)
+
+    small = Image.fromarray(framed, mode='L').resize(
+        (MODEL_GRID_SIZE, MODEL_GRID_SIZE), Image.BOX
+    )
+    result = np.asarray(small, dtype=np.float32)
+    if result.max() <= 0:
+        raise ValueError("The drawing is too faint. Please draw a digit with a darker pen.")
+    result = result / result.max()
+    return result.reshape(1, MODEL_GRID_SIZE * MODEL_GRID_SIZE)
+
+
+def _thicken_thin_strokes(ink):
+    """Widen strokes thinner than TARGET_STROKE_RATIO of the digit height."""
+    height = ink.shape[0]
+    mask = ink > 0
+    # Largest distance from a stroke pixel to the background ~ half the stroke width.
+    current_width = 2 * ndimage.distance_transform_edt(np.pad(mask, 1)).max()
+    radius = (TARGET_STROKE_RATIO * height - current_width) / 2
+    if radius < 1:
+        return ink
+    radius = int(round(radius))
+    padded = np.pad(mask, radius)
+    distance_to_stroke = ndimage.distance_transform_edt(~padded)
+    return np.where(distance_to_stroke <= radius, 255, 0).astype(np.uint8)
 
 
 def convert_canvas_to_mnist(canvas_data):
     """
-    Convert a 400x400 pixel canvas drawing to 8x8 MNIST format.
+    Resize a 400x400 pixel canvas drawing to 8x8 (plain downscale, no cropping).
 
-    Takes a 400x400 pixel canvas (typically from a drawing application) and
-    converts it to 8x8 pixel format with proper normalization for MNIST model
-    prediction. Outputs shape is (1, 64) compatible with sklearn predict().
+    Kept for backwards compatibility. The recognizer does not use it, because
+    a plain downscale keeps the canvas polarity (white background) and the thin
+    3px strokes almost vanish; use preprocess_canvas_for_model() to build the
+    model input.
 
     Arguments:
         canvas_data: numpy array of shape (400, 400) with uint8 pixel values.
@@ -119,6 +213,7 @@ def make_prediction(recognizer, mnist_data):
     Args:
         recognizer: DigitRecognizer instance (pre-trained)
         mnist_data: numpy array of shape (1, 64) with normalized values 0-1
+            (bright stroke = 1.0, dark background = 0.0)
 
     Returns:
         Predicted digit (int, 0-9)
@@ -129,7 +224,7 @@ def make_prediction(recognizer, mnist_data):
 
 def make_prediction_from_canvas(recognizer, canvas_data):
     """
-    Convert canvas data to MNIST format and make prediction.
+    Convert canvas data to the model's input format and make a prediction.
 
     Args:
         recognizer: DigitRecognizer instance (pre-trained)
@@ -139,17 +234,11 @@ def make_prediction_from_canvas(recognizer, canvas_data):
         Predicted digit (int, 0-9)
 
     Raises:
-        ValueError: If canvas is empty (all white)
+        ValueError: If the canvas is empty (all white) or the drawing is too
+            small to be a digit.
     """
-    # Check if canvas is empty (all white >= 250)
-    if np.all(canvas_data >= 250):
-        raise ValueError("Canvas is empty. Please draw a digit before making a prediction.")
-
-    # Convert canvas to MNIST format
-    mnist_data = convert_canvas_to_mnist(canvas_data)
-
-    # Make prediction
-    return make_prediction(recognizer, mnist_data)
+    model_input = preprocess_canvas_for_model(canvas_data)
+    return make_prediction(recognizer, model_input)
 
 
 def load_model():
@@ -347,7 +436,7 @@ class DigitRecognizerApp:
         """
         Make a prediction based on the current drawing.
 
-        Converts the drawing to MNIST format and calls the recognizer.
+        Converts the drawing to the model's input format and calls the recognizer.
         Updates the result label with the predicted digit.
         Shows appropriate error messages for empty canvas or other errors.
         """
