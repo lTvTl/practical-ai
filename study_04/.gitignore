@@ -1,0 +1,27 @@
+# 환경 변수 및 API 키 보호 (절대 커밋 금지)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+env/
+
+# Node.js
+node_modules/
+
+# 런타임 생성 데이터 / 테스트 산출물
+data/store.json
+data/store.json.*
+static/generated/
+test_output.webp
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

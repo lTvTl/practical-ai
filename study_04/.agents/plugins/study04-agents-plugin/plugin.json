@@ -1,0 +1,5 @@
+{
+  "name": "study04-agents-plugin",
+  "description": "study_04 (냉장고 파먹기 AI 셰프) 프로젝트 전용 서브에이전트 및 스킬 플러그인",
+  "version": "1.0.0"
+}
