@@ -35,7 +35,7 @@
 ![시작 화면](screenshots/01_initial.png)
 
 ### 2. 숫자 그리기
-캔버스에 마우스로 숫자 `1`을 그린 상태입니다.
+캔버스에 마우스로 숫자 `3`을 그린 상태입니다.
 
 ![숫자를 그린 화면](screenshots/02_digit_drawn.png)
 

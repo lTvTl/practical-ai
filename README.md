@@ -37,7 +37,7 @@
 ### ✨ 주요 기능
 - **직관적인 드로잉 캔버스**: 400x400 크기의 캔버스에 자유롭게 숫자 드로잉
 - **머신러닝 기반 숫자 인식**: Scikit-learn의 `digits` 데이터셋으로 학습된 Random Forest 모델을 통해 실시간 예측
-- **이미지 자동 전처리**: 사용자가 그린 고해상도 이미지를 모델 입력 규격(8x8 다운샘플링 및 정규화)으로 실시간 변환
+- **이미지 자동 전처리**: 사용자가 그린 이미지를 학습 데이터 규격에 맞춰(색상 반전·숫자 영역 크롭·획 두께 보정·8x8 정규화) 실시간 변환
 - **캔버스 초기화(Clear)**: 원클릭으로 캔버스를 지우고 새로운 숫자 테스트 가능
 - **독립 실행 파일(.exe) 패키징 지원**: PyInstaller를 통한 단일 실행 파일 빌드 구성 지원
 
@@ -62,7 +62,7 @@ python main.py
 ### 🧪 테스트 실행
 ```bash
 # 단위 테스트 실행 (모델 & GUI 변환)
-pytest test_digit_recognition.py test_gui.py
+pytest test_digit_recognition.py test_gui.py test_digit_accuracy.py
 
 # 종합 수동 워크플로 시뮬레이션 테스트
 python test_manual_workflow.py
